@@ -15,12 +15,48 @@
  * Version:     1.0.0
  * Author:      Axel Jankowski
  * Author URI:  https://axeljankowski.github.io
+ * License:     ISC
  */
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
+
+
+
+class ToDoList
+{
+	function __construct() {
+		add_action( 'init', array( $this, 'custom_post_type' ) );
+	}
+
+	function activate() {
+		//echo 'ToDo List plugin was activated. I hope you will like it. :)';
+		$this->custom_post_type();
+
+		flush_rewrite_rules();
+	}
+
+	function deactivate() {
+		//echo 'ToDo List plugin was deactivated.';
+		flush_rewrite_rules();
+	}
+
+	function custom_post_type() {
+		register_post_type( 'task', ['public' => true, 'label' => 'Tasks'] );
+	}
+}
+
+if ( class_exists( 'ToDoList' ) ) {
+	$toDoList = new ToDoList();
+}
+
+register_activation_hook( __FILE__, array( $toDoList, 'activate' ) );
+
+register_deactivation_hook( __FILE__, array( $toDoList, 'deactivate' ) );
+
+
 
 /**
  * Enqueue frontend scripts.
