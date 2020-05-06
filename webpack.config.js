@@ -7,8 +7,8 @@ const config = {
 	// One for frontend and one for the admin area.
 	entry: {
 		// frontend and admin will replace the [name] portion of the output config below.
-		frontend: './src/front/front-index.js',
-		admin: './src/admin/admin-index.js'
+		frontend: './src/frontend/app.js',
+		backend: './src/backend/app.js'
 	},
 
 	// Create the output files.
