@@ -9,8 +9,9 @@
     ]
   },
   "scripts": {
-    "watch": "webpack --mode=development --watch --config webpack-config.js",
-    "build": "webpack --mode=production --config webpack-config.js"
+    "watch": "webpack --mode=development --watch --config webpack.config.js",
+    "build": "webpack --mode=production --config webpack.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "Axel Jankowski",
@@ -20,6 +21,10 @@
     "@babel/core": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
     "babel-loader": "^8.1.0",
+    "css-loader": "^3.5.3",
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2",
+    "style-loader": "^1.2.1",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11"
   }

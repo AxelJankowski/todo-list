@@ -31,7 +31,22 @@ const config = {
 				exclude: /node_modules/,
 				// Use babel loader to transpile the JS files.
 				loader: 'babel-loader'
-			}
+			},
+			{
+				// Look for any .sass/.scss files.
+				test: /\.s[ac]ss$/i,
+				use: [
+					'style-loader',
+					'css-loader',
+					{
+						loader: 'sass-loader',
+						options: {
+							// Prefer `dart-sass`
+							implementation: require('sass'),
+						},
+					},
+				],
+			},
 		]
 	}
 }

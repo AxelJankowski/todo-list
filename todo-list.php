@@ -48,19 +48,21 @@ class ToDoList
 	}
 }
 
+
 if ( class_exists( 'ToDoList' ) ) {
 	$toDoList = new ToDoList();
 }
 
+
+// Activation.
 register_activation_hook( __FILE__, array( $toDoList, 'activate' ) );
 
+// Deactivation.
 register_deactivation_hook( __FILE__, array( $toDoList, 'deactivate' ) );
 
 
 
-/**
- * Enqueue frontend scripts.
- */
+// Enqueue frontend scripts.
 function frontend_scripts() {
 	wp_enqueue_script(
 	'wds-wwe-frontend-js',
@@ -71,9 +73,7 @@ function frontend_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'frontend_scripts' );
 
-/**
- * Enqueue admin scripts.
- */
+// Enqueue admin scripts.
 function admin_scripts() {
 	wp_enqueue_script(
 	'wds-wwe-admin-js',
