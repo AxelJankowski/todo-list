@@ -7,15 +7,19 @@
  * @package ToDo List
  */
 
- if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-     die;
- }
+if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
+    die;
+}
 
 
 
- // Delete database data.
- $tasks = get_posts( array( 'post_type' => 'task' , 'numberposts' => -1 ) );
+// Delete database table.
+global $table_prefix, $wpdb;
 
- foreach( $tasks as $task ) {
-     wp_delete_post( $task->ID, true );
- }
+$tablename = 'todo_list';
+$todo_list_table = $table_prefix . $tablename;
+
+$sql = "DROP TABLE IF EXISTS `$todo_list_table`";
+$wpdb->query($sql);
+
+delete_option("todo_list_plugin_version");

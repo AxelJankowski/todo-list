@@ -25,61 +25,145 @@ if ( ! defined( 'WPINC' ) ) {
 
 
 
-class ToDoList
+class ToDoListPlugin extends WP_Widget
 {
 	function __construct() {
-		add_action( 'init', array( $this, 'custom_post_type' ) );
+
+		parent::__construct(
+            'todo_list_widget',  // Base ID
+			'ToDo List',  // Name
+			array( 'description' => 'ToDo list widget created for MPC.' )
+		);
+		
+		add_action( 'widgets_init', function() {
+            register_widget( 'ToDoListPlugin' );
+		});
+		
 	}
 
-	function activate() {
-		//echo 'ToDo List plugin was activated. I hope you will like it. :)';
-		$this->custom_post_type();
 
-		flush_rewrite_rules();
+
+	/**
+	 * Load scripts and stuff.
+	 */
+	function register() {
+		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'backend_scripts' ) );
+
+		add_action( 'admin_menu', array( $this, 'add_admin_pages' ) );
 	}
 
-	function deactivate() {
-		//echo 'ToDo List plugin was deactivated.';
-		flush_rewrite_rules();
+
+
+	public function widget( $args, $instance ) {
+
+		echo $args['before_widget'];
+
+		if ( ! empty( $instance['title'] ) ) {
+			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
+		}
+
+		// Widget output.
+		echo 'HELLO, WORLD!';
+
+		echo $args['after_widget'];
+    }
+ 
+
+	
+    public function form( $instance ) {
+ 
+        $title = ! empty( $instance['title'] ) ? $instance['title'] : esc_html__( '', 'text_domain' );
+        $text = ! empty( $instance['text'] ) ? $instance['text'] : esc_html__( '', 'text_domain' );
+        ?>
+
+		<!-- Title -->
+        <p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>">
+				<?php echo esc_html__( 'Title:', 'text_domain' ); ?>
+			</label>
+
+            <input
+				class="widefat"
+				id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"
+				name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>"
+				type="text"
+				value="<?php echo esc_attr( $title ); ?>"
+			>
+        </p>
+
+		<!-- Text -->
+        <p>
+            <label for="<?php echo esc_attr( $this->get_field_id( 'Text' ) ); ?>">
+				<?php echo esc_html__( 'Text:', 'text_domain' ); ?>
+			</label>
+
+            <textarea
+				class="widefat"
+				id="<?php echo esc_attr( $this->get_field_id( 'text' ) ); ?>"
+				name="<?php echo esc_attr( $this->get_field_name( 'text' ) ); ?>"
+				type="text"
+				cols="30"
+				rows="10"><?php echo esc_attr( $text ); ?>
+			</textarea>
+        </p>
+        <?php
+ 
+    }
+ 
+
+
+	/**
+	 * Update
+	 */
+    public function update( $new_instance, $old_instance ) {
+ 
+        $instance = array();
+ 
+        $instance['title'] = ( !empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+        $instance['text'] = ( !empty( $new_instance['text'] ) ) ? $new_instance['text'] : '';
+ 
+        return $instance;
+    }
+
+
+	
+	// Add panel in wp navigation
+	public function add_admin_pages() {
+		add_menu_page( 'ToDo List', 'ToDo List', 'manage_options', 'todo_list_plugin', array( $this, 'admin_index' ), 'dashicons-format-aside', null );
+	}
+	public function admin_index() {
+		// Work in progress...
 	}
 
-	function custom_post_type() {
-		register_post_type( 'task', ['public' => true, 'label' => 'Tasks'] );
+
+
+	// Enqueue frontend (wp).
+	function frontend_scripts() {
+		wp_register_script( 'frontend-js', plugins_url( 'dist/js/frontend.js', __FILE__ ), [ 'jquery' ], '11272018' );
+		wp_enqueue_script( 'frontend-js' );
+	}
+
+	// Enqueue backend (admin).
+	function backend_scripts() {
+		wp_register_script( 'backend-js', plugins_url( 'dist/js/backend.js', __FILE__ ), [ 'jquery' ], '11272018' );
+		wp_enqueue_script( 'backend-js' );
 	}
 }
 
 
-if ( class_exists( 'ToDoList' ) ) {
-	$toDoList = new ToDoList();
+
+if ( class_exists( 'ToDoListPlugin' ) ) {
+	$toDoList = new ToDoListPlugin();
+	$toDoList->register();
 }
 
 
-// Activation.
-register_activation_hook( __FILE__, array( $toDoList, 'activate' ) );
+
+// Activation (create table in database).
+require_once plugin_dir_path( __FILE__ ) . 'includes/todo-list-activate.php';
+register_activation_hook( __FILE__, array( 'ToDoListActivate', 'activate' ) );
 
 // Deactivation.
-register_deactivation_hook( __FILE__, array( $toDoList, 'deactivate' ) );
-
-
-
-// Enqueue frontend scripts.
-function frontend_scripts() {
-	wp_enqueue_script(
-	'wds-wwe-frontend-js',
-	plugins_url( 'assets/js/frontend.js', __FILE__ ),
-	[ 'jquery' ],
-	'11272018'
-	);
-}
-add_action( 'wp_enqueue_scripts', 'frontend_scripts' );
-
-// Enqueue admin scripts.
-function admin_scripts() {
-	wp_enqueue_script(
-	'wds-wwe-admin-js',
-	plugins_url( 'assets/js/admin.js', __FILE__ ),
-	[ 'jquery' ],
-	'11272018'
-	);
-}
-add_action( 'admin_enqueue_scripts', 'admin_scripts' );
+require_once plugin_dir_path( __FILE__ ) . 'includes/todo-list-deactivate.php';
+register_deactivation_hook( __FILE__, array( 'ToDoListDeactivate', 'deactivate' ) );
