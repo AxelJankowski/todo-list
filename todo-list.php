@@ -101,7 +101,6 @@ class ToDoListPlugin
 						<label class="input-out">
 							<input class="input-in list-hover" type="item-text" id="task" placeholder="Enter new task here...">
 						</label>
-						<button type="submit">asd</button>
 					</form>
 
 					<li class="item list-hover">
