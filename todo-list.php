@@ -25,22 +25,8 @@ if ( ! defined( 'WPINC' ) ) {
 
 
 
-class ToDoListPlugin extends WP_Widget
+class ToDoListPlugin
 {
-
-	function __construct() { // Add widget functionality
-		parent::__construct(
-            'todo_list_widget',      // Base ID
-			'ToDo List',             // Name
-			array( 'description' => 'ToDo list widget created for MPC.' )
-		);
-		
-		add_action( 'widgets_init', function() {
-            register_widget( 'ToDoListPlugin' );
-		});
-	}
-
-
 
 	/**
 	 * Load scripts and admin panel.
@@ -85,84 +71,6 @@ class ToDoListPlugin extends WP_Widget
 	}
 
 
-
-	/**
-	 * Widget output.
-	 */
-	public function widget( $args, $instance ) {
-
-		echo $args['before_widget'];
-
-		if ( ! empty( $instance['title'] ) ) {
-			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
-		}
-
-		echo 'hello world';
-
-		echo $args['after_widget'];
-    }
- 
-
-	
-	/**
-	 * Panel options.
-	 */
-    public function form( $instance ) {
- 
-        $title = ! empty( $instance['title'] ) ? $instance['title'] : esc_html__( '', 'text_domain' );
-        $text = ! empty( $instance['text'] ) ? $instance['text'] : esc_html__( '', 'text_domain' );
-        ?>
-
-		<!-- Title -->
-        <p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>">
-				<?php echo esc_html__( 'Title:', 'text_domain' ); ?>
-			</label>
-
-            <input
-				class="widefat"
-				id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"
-				name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>"
-				type="text"
-				value="<?php echo esc_attr( $title ); ?>"
-			>
-        </p>
-
-		<!-- Text -->
-        <p>
-            <label for="<?php echo esc_attr( $this->get_field_id( 'Text' ) ); ?>">
-				<?php echo esc_html__( 'Text:', 'text_domain' ); ?>
-			</label>
-
-            <textarea
-				class="widefat"
-				id="<?php echo esc_attr( $this->get_field_id( 'text' ) ); ?>"
-				name="<?php echo esc_attr( $this->get_field_name( 'text' ) ); ?>"
-				type="text"
-				cols="30"
-				rows="10"><?php echo esc_attr( $text ); ?>
-			</textarea>
-        </p>
-        <?php
- 
-    }
- 
-
-
-	/**
-	 * Update
-	 */
-    public function update( $new_instance, $old_instance ) {
- 
-        $instance = array();
- 
-        $instance['title'] = ( !empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
-        $instance['text'] = ( !empty( $new_instance['text'] ) ) ? $new_instance['text'] : '';
- 
-        return $instance;
-	}
-	
-
 	
 	/**
 	 * Add "ToDo List" admin panel in wp navigation
@@ -198,24 +106,24 @@ class ToDoListPlugin extends WP_Widget
 
 					<li class="item list-hover">
 						<label class="item-checkbox">
-							<input type="checkbox">
+							<input type="checkbox" checked="checked">
 							<span class="checkmark"></span>
 						</label>
-						<label class="item-text list-hover">zrob kupe<label>
+						<label class="item-text list-hover">ale bardzo się staram serio<label>
 					</li>
 					<li class="item list-hover">
 						<label class="item-checkbox">
 							<input type="checkbox" checked="checked">
 							<span class="checkmark"></span>
 						</label>
-						<label class="item-text list-hover">zjedz kupe<label>
+						<label class="item-text list-hover">niech mnie wezmą chociaż na staż<label>
 					</li>
 					<li class="item list-hover">
 						<label class="item-checkbox">
 							<input type="checkbox">
 							<span class="checkmark"></span>
 						</label>
-						<label class="item-text list-hover">do mycia maly gnoju<label>
+						<label class="item-text list-hover">pan da 3<label>
 					</li>
 				</ul>
 
