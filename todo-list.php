@@ -27,11 +27,6 @@ if ( ! defined( 'WPINC' ) ) {
 
 class ToDoListPlugin extends WP_Widget
 {
-	const VERSION     = '1.0.0';
-	const POST_TYPE   = 'todo_list';
-	const STATUS_META = 'todo_list_item_status';
-
-	static $instance  = false;
 
 	function __construct() { // Add widget functionality
 		parent::__construct(
@@ -43,8 +38,6 @@ class ToDoListPlugin extends WP_Widget
 		add_action( 'widgets_init', function() {
             register_widget( 'ToDoListPlugin' );
 		});
-
-		$this->ajax_hooks();
 	}
 
 
@@ -57,13 +50,37 @@ class ToDoListPlugin extends WP_Widget
 		add_action( 'admin_enqueue_scripts', array( $this, 'backend_scripts' ) );
 
 		add_action( 'admin_menu',            array( $this, 'add_admin_pages' ) );
+
+		add_action( 'wp_ajax_add_task',      array( $this, 'add_task' ) );
 	}
 
 
 
-	function ajax_hooks() {
-		foreach ( array( 'add_item', 'clear_list', 'delete_item', 'do_item', 'undo_item' ) as $action ) {
-			add_action( 'wp_ajax_todo_list_' . $action, array( $this, 'wp_ajax_' . $action ) );
+	/**
+	 * Add task.
+	 */
+	function add_task() {
+
+		if( isset($_POST['#todo_list_new_task_input'] ) ) {
+
+			global $wpdb; // Get access to database.
+		
+			$data_array = array(
+				'task' => $_POST['task']
+			);
+			$table_name = 'wp_todo_list';
+		
+			$rowResult = $wpdb->insert( $table_name, $data_array, $format=NULL );
+		
+			// $rowResult returns 1
+		
+			if( $rowResult == 1 ) {
+				echo '<h1>Task added successfully!</h1>';
+			} else {
+				echo 'Error adding task.';
+			}
+		
+			wp_die();
 		}
 	}
 
@@ -146,9 +163,6 @@ class ToDoListPlugin extends WP_Widget
 	}
 	
 
-
-	
-
 	
 	/**
 	 * Add "ToDo List" admin panel in wp navigation
@@ -171,14 +185,15 @@ class ToDoListPlugin extends WP_Widget
 			<div class="container-in">
 
 				<ul class="list">
-					<form class="item list-hover item-input" action="#" id="ataskmanager_page_add_new_form" data-page="true">
+					<form method="POST" action="#" class="item list-hover item-input" id="new_task_form" data-page="true">
 						<label class="item-checkbox">
 							<input type="checkbox">
 							<span class="checkmark"></span>
 						</label>
 						<label class="input-out">
-							<input class="input-in list-hover" type="item-text" id="ataskmanager_page_new_task" placeholder="Enter new task here...">
+							<input class="input-in list-hover" type="item-text" id="task" placeholder="Enter new task here...">
 						</label>
+						<button type='submit'></button>
 					</form>
 
 					<li class="item list-hover">

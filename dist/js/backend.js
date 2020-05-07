@@ -93,7 +93,7 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("\n\n//# sourceURL=webpack:///./src/backend/app.js?");
+eval("jQuery(document).ready(function () {\n  jQuery('#new_task_form').submit(function (event) {\n    // Trigger on submit\n    event.preventDefault();\n    jQuery.ajax({\n      type: 'POST',\n      dataType: 'json',\n      data: jQuery(\"#new_task_form\").serialize(),\n      url: ajaxurl,\n      success: function success(data) {\n        alert('Form submit success!');\n      }\n    });\n  });\n});\n\n//# sourceURL=webpack:///./src/backend/app.js?");
 
 /***/ })
 

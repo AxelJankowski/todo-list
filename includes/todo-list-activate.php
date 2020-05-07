@@ -22,11 +22,7 @@
             $sql = "CREATE TABLE IF NOT EXISTS `" . $todo_list_table . "`  ( ";
             $sql .= "  `id`  int(11)   NOT NULL auto_increment, ";
             $sql .= "  `created_user_id` int(11) NOT NULL, ";
-            $sql .= "  `assigned_user_id` int(11) NOT NULL, ";
-            $sql .= "  `created_time` datetime NOT NULL, ";
-            $sql .= "  `updated_time` datetime NOT NULL, ";
-            $sql .= "  `title` text NOT NULL, ";
-            $sql .= "  `content` longtext NOT NULL, ";
+            $sql .= "  `task` text NOT NULL, ";
             $sql .= "  `status` varchar(255) NOT NULL, ";
             $sql .= "  `priority` int(11) NOT NULL DEFAULT '0', ";
             $sql .= "  PRIMARY KEY `id` (`id`) ";
