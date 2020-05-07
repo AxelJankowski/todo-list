@@ -12,7 +12,8 @@ jQuery(document).ready(function() {
                     {
                         alert('Form submit success!');
                     }
-        })
+        });
+        
     });
 
 });

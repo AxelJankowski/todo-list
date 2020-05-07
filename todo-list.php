@@ -101,7 +101,6 @@ class ToDoListPlugin
 						<label class="input-out">
 							<input class="input-in list-hover" type="item-text" id="task" placeholder="Enter new task here...">
 						</label>
-						<button type='submit'></button>
 					</form>
 
 					<li class="item list-hover">
@@ -109,21 +108,21 @@ class ToDoListPlugin
 							<input type="checkbox" checked="checked">
 							<span class="checkmark"></span>
 						</label>
-						<label class="item-text list-hover">ale bardzo się staram serio<label>
+						<label class="item-text list-hover">Ale bardzo się staram serio.<label>
 					</li>
 					<li class="item list-hover">
 						<label class="item-checkbox">
 							<input type="checkbox" checked="checked">
 							<span class="checkmark"></span>
 						</label>
-						<label class="item-text list-hover">niech mnie wezmą chociaż na staż<label>
+						<label class="item-text list-hover">Niech mnie wezmą chociaż na staż.<label>
 					</li>
 					<li class="item list-hover">
 						<label class="item-checkbox">
 							<input type="checkbox">
 							<span class="checkmark"></span>
 						</label>
-						<label class="item-text list-hover">pan da 3<label>
+						<label class="item-text list-hover">Pan da 3.<label>
 					</li>
 				</ul>
 
