@@ -1,314 +1,97 @@
+@import '_colors.scss';
+
 @font-face {
-    font-family: 'Open Sans', sans-serif;
-    src: url(/src/frontend/fonts/OpenSans-Regular.ttf);
+  font-family: 'Open Sans', sans-serif;
+  src: url(/src/frontend/fonts/OpenSans-Regular.ttf);
 }
+
+
+
+
+
+/*------------------------------------*\
+  #SETTINGS Global
+\*------------------------------------*/
 
 * {
-    font-family: 'Open Sans', sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
-
-.red {
-    color: red;
-}
-
-.ataskmanager-icon:before{
-    content: "\f204";
-        font: normal 20px/1 dashicons;
-        top:5px;
-        position: relative;
-}
-
-
-.ataskmanager_popup {
-  background-color:#f1f1f1;
-  border:5px solid #999999;
-  border-top: 0;
-  cursor:default;
-  display:none;
-  position:absolute;
-  text-align:left;
-  width:300px;
-  z-index:50;
-  padding: 15px 15px 0;
-}
-
-
-.ataskmanager_popup p, .ataskmanager_popup.div {
-  border-bottom: 1px solid #EFEFEF;
-  margin: 8px 0;
-  padding-bottom: 8px;
-}
-
-.ataskmanager_popup_bottom{
-    margin-top: 10px;
-    text-align: right;
-   
-}
-
-.ataskmanager_popup_bottom a.ataskmanager_view_all{
-    color: #eee;
-     background-color: #aaaaaa;
-    text-decoration: none;
-    font-weight:bold;
-    padding: 5px 10px;
-    display: inline-block;
-}
-
-
-
-.ataskmanager_popup_item_label {
-  display: block;
-  position: relative;
-  padding: 8px 0 8px 35px;
-
-  cursor: pointer;
-  font-size: 16px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-
-.ataskmanager_popup_item_label.ataskmanager_editing{
-    padding-top:0;
-    padding-bottom: 0;
-}
-
-
-.ataskmanager_popup_item_label.ataskmanager_editing input[type=text]
-{
-    border: 0;
-    width: 100%;
-}
-
-.ataskmanager_popup_item_label input[type=checkbox] {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
-
-
-.ataskmanager_check_mark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 25px;
-  width: 25px;
-  background-color: #fff;
-}
-
-/* On mouse-over, add a grey background color */
-.ataskmanager_popup_item_label:hover input ~ .ataskmanager_check_mark {
-  background-color: #ccc;
-}
-
-.ataskmanager_popup_item_label:hover input ~ .ataskmanager_check_mark:after {
-    display: block;
-}
-
-/* When the checkbox is checked, add a blue background */
-.ataskmanager_popup_item_label input:checked ~ .ataskmanager_check_mark {
-  background-color: #2196F3;
-}
-
-/* Create the ataskmanager_check_mark/indicator (hidden when not checked) */
-.ataskmanager_check_mark:after {
-  content: "";
-  position: absolute;
-  display: none;
-}
-
-/* Show the ataskmanager_check_mark when checked */
-.ataskmanager_popup_item_label input:checked ~ .ataskmanager_check_mark:after {
-  display: block;
-}
-
-/* Style the ataskmanager_check_mark/indicator */
-.ataskmanager_popup_item_label .ataskmanager_check_mark:after {
-  left: 9px;
-  top: 5px;
-  width: 5px;
-  height: 10px;
-  border: solid white;
-  border-width: 0 3px 3px 0;
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  transform: rotate(45deg);
-}
-
-
-.wpt-loader {
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
-}
-.wpt-loader div {
-  display: inline-block;
-  position: absolute;
-  left: 8px;
-  width: 16px;
-  background: #fff;
-  animation: wpt-loader 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
-}
-.wpt-loader div:nth-child(1) {
-  left: 8px;
-  animation-delay: -0.24s;
-}
-.wpt-loader div:nth-child(2) {
-  left: 32px;
-  animation-delay: -0.12s;
-}
-.wpt-loader div:nth-child(3) {
-  left: 56px;
-  animation-delay: 0;
-}
-@keyframes wpt-loader {
-  0% {
-    top: 8px;
-    height: 64px;
+.container {
+  &-out { // Background of the list
+    height:           100vh;
+    display:           flex;
+    align-items:     center;
+    justify-content: center;
   }
-  50%, 100% {
-    top: 24px;
-    height: 32px;
+  &-in { // List itself
+    background-color: $background-color;
+    min-width:  25em;
+    width:      auto;
+    height:     auto;
+    padding:       0;
+    box-shadow: 0 0.1em 0.3em $shadow-color;
   }
 }
 
-#ataskmanager_new_task, #ataskmanager_page_new_task{
-    border: 0;
-    margin: 0;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
-    height: 32px;
-    min-width: 230px;
-    width: 80%;
+
+
+
+
+/*------------------------------------*\
+  #TODO LIST
+\*------------------------------------*/
+
+.list {
+  color:              $text-color;
+  font-size:                1.3em;
+  padding:                      0;
+  margin:                       0;
+  width:                     auto;
+  font-family: courier, monospace;
+  border:     1px solid #dedede;
+  & .item {
+    list-style: none;
+    border-bottom: 1px solid $line-color;
+    height:     auto;
+    padding: 0.6em 0;
+    margin:        0;
+    &-input {
+      padding:     0;
+      background-color: $hover-color;
+    }
+    &-checkbox {
+      display:          inline;
+      padding:          0.6em 0 0.6em 0.6em;
+      border-right: 0.06em solid $red-lines;
+      margin-right:     0.2em;
+    }
+    &-text {
+      display: inline;
+      border:    none;
+      padding:  0.6em;
+      border-left: 0.06em solid $red-lines;
+    }
+  }
 }
 
-#ataskmanager_new_task_button, #ataskmanager_page_new_task_button{
-    height: 32px;
-    margin: 0;
-    border-left:0;
-   
+.list-hover:hover {
+  background-color: $hover-color;
+  -webkit-transition: all 0.2s;
+  -moz-transition:    all 0.2s;
+  -ms-transition:     all 0.2s;
+  -o-transition:      all 0.2s;
 }
 
-
-#ataskmanager_new_task_button:hover, #ataskmanager_page_new_task_button:hover{
-    cursor: pointer;
-}
-
-
-.ataskmanager-status-2 .dashicons{
-     padding: 8px 10px 6px 2px;
-}
-
-.ataskmanager-status-2 label{
+.input {
+  &-out {
+    border-left: 0.06em solid $red-lines;
+    padding: 0.6em 0;
+  }
+  &-in {
     padding: 0;
-        margin-top: 4px;
-}
-
-.ataskmanager_recover_task{
-    text-decoration: none;
-}
-
-.ataskmanager_list.ataskmanager_list_lg .ataskmanager_popup_task.ataskmanager-status-2 .ataskmanager_trash_task
-{
-    padding: 0 7px;
-}
-
-.ataskmanager_list.ataskmanager_list_lg .ataskmanager_popup_task.ataskmanager-status-2 .ataskmanager_delete_task{
-   padding: 0 7px;
-}
-
-.ataskmanager-status-2 label{
-      text-decoration: line-through;
-      color: #aaaaaa;
-}
-
-
-
-.ataskmanager_list.ataskmanager_list_lg .ataskmanager_popup_task label{
-    width: 500px;
-    max-width: 80%;
-    display: inline-block;
-}
-
-.ataskmanager_list.ataskmanager_list_lg .ataskmanager_popup_task .ataskmanager_trash_task{
-   
-    text-decoration: none;
-    color: #73403c;
-    padding: 7px;
-    display: inline-block;
-}
-
-
-.ataskmanager_list.ataskmanager_list_lg .ataskmanager_popup_task .ataskmanager_delete_task{
-      margin-left: 30px;
-    text-decoration: none;
-    color: #b03228;
-    padding: 7px;
-    display: inline-block;
-}
-
-.ataskmanager_list.ataskmanager_list_lg .ataskmanager_popup_task .ataskmanager_trash_task:hover{
-    color: #f21000;
-}
-
-.ataskmanager_list.ataskmanager_list_lg .ataskmanager_popup_task .ataskmanager_delete_task:hover{
-    color: #f21000;
-}
-
-.ataskmanager_list.ataskmanager_list_lg .ataskmanager_popup_task:hover{
-    background-color: #f9f9f9;
-}
-
-.ataskmanager_popup_close{
-    position: absolute;
-    top: 0;
-    right: 0;
- 
-}
-
-.ataskmanager_edit_task{
-        margin-left: 30px;
-    text-decoration: none;
-   
-    padding: 7px;
-    display: inline-block;
-}
-
-.ataskmanager_save{
-        margin-left: 30px;
-    text-decoration: none;
-   
-    padding: 7px;
-    display: inline-block;
-}
-
-.ataskmanager_popup_close > a{
-      border-bottom-left-radius: 5px;
-        color: #eee;
-    background-color: #aaaaaa;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 5px 10px;
-    display: inline-block;
-}
-
-#wpadminbar .ataskmanager-remaining-tasks{
-    padding: 0 6px;
-    display: inline-block;
-    background-color: #d54e21;
-    color: #fff;
-    font-size: 9px;
-    line-height: 17px;
-    font-weight: 600;
-    margin: 1px 0 0 2px;
-    vertical-align: top;
-    border-radius: 10px;
-    z-index: 26;
-    margin-top: 8px;
-    margin-left: 5px;
+    background-color: $hover-color;
+    display: inline;
+    border:    none;
+    padding:  0.6em;
+  }
 }

@@ -27,9 +27,13 @@ if ( ! defined( 'WPINC' ) ) {
 
 class ToDoListPlugin extends WP_Widget
 {
-	function __construct() {
+	const VERSION     = '1.0.0';
+	const POST_TYPE   = 'todo_list';
+	const STATUS_META = 'todo_list_item_status';
 
-		// Add widget functionality
+	static $instance  = false;
+
+	function __construct() { // Add widget functionality
 		parent::__construct(
             'todo_list_widget',      // Base ID
 			'ToDo List',             // Name
@@ -39,7 +43,8 @@ class ToDoListPlugin extends WP_Widget
 		add_action( 'widgets_init', function() {
             register_widget( 'ToDoListPlugin' );
 		});
-		
+
+		$this->ajax_hooks();
 	}
 
 
@@ -51,7 +56,15 @@ class ToDoListPlugin extends WP_Widget
 		add_action( 'admin_enqueue_scripts', array( $this, 'frontend_scripts' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'backend_scripts' ) );
 
-		add_action( 'admin_menu', array( $this, 'add_admin_pages' ) );
+		add_action( 'admin_menu',            array( $this, 'add_admin_pages' ) );
+	}
+
+
+
+	function ajax_hooks() {
+		foreach ( array( 'add_item', 'clear_list', 'delete_item', 'do_item', 'undo_item' ) as $action ) {
+			add_action( 'wp_ajax_todo_list_' . $action, array( $this, 'wp_ajax_' . $action ) );
+		}
 	}
 
 
@@ -154,29 +167,45 @@ class ToDoListPlugin extends WP_Widget
 	public function admin_panel() { // Work in progress...
 		?>
 		
-		<h2>Tasks</h2>
+		<div class="container-out">
+			<div class="container-in">
 
-	    <hr>
+				<ul class="list">
+					<form class="item list-hover item-input" action="#" id="ataskmanager_page_add_new_form" data-page="true">
+						<label class="item-checkbox">
+							<input type="checkbox">
+							<span class="checkmark"></span>
+						</label>
+						<label class="input-out">
+							<input class="input-in list-hover" type="item-text" id="ataskmanager_page_new_task" placeholder="Enter new task here...">
+						</label>
+					</form>
 
-	    <div class="ataskmanager_add_new">
-	        <form action="#" id="ataskmanager_page_add_new_form" data-page="true">
-	            <input type="text" id="ataskmanager_page_new_task" placeholder="Enter new tak here...">
-				<button id="ataskmanager_page_new_task_button" type="submit">
-					<span class="dashicons icons-plus"></span>
-				</button>
-	        </form>
-	    </div>
-	
-	    <hr>
-		
-	    <script>
-			window.ataskmanager_all_page = true;
-			window.ataskmanager_updated = false;
-			window.ataskmanager_loaded = false;
-		</script>
+					<li class="item list-hover">
+						<label class="item-checkbox">
+							<input type="checkbox">
+							<span class="checkmark"></span>
+						</label>
+						<label class="item-text list-hover">zrob kupe<label>
+					</li>
+					<li class="item list-hover">
+						<label class="item-checkbox">
+							<input type="checkbox" checked="checked">
+							<span class="checkmark"></span>
+						</label>
+						<label class="item-text list-hover">zjedz kupe<label>
+					</li>
+					<li class="item list-hover">
+						<label class="item-checkbox">
+							<input type="checkbox">
+							<span class="checkmark"></span>
+						</label>
+						<label class="item-text list-hover">do mycia maly gnoju<label>
+					</li>
+				</ul>
 
-	    <ul class="ataskmanager_list ataskmanager_list_lg">
-	    </ul>
+			</div>
+		</div>
 	
 	    <?php
 	}
