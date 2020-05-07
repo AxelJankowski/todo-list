@@ -1,3 +1,3 @@
 import './main.scss';
 
-console.log('siema siema')
+console.log('Siema, siema z przodu!');

@@ -15,11 +15,10 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 // Delete database table.
 global $table_prefix, $wpdb;
-
 $tablename = 'todo_list';
 $todo_list_table = $table_prefix . $tablename;
 
 $sql = "DROP TABLE IF EXISTS `$todo_list_table`";
-$wpdb->query($sql);
+$wpdb->query( $sql );
 
-delete_option("todo_list_plugin_version");
+delete_option( "todo_list_plugin_version" );

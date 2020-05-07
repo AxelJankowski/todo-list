@@ -29,9 +29,10 @@ class ToDoListPlugin extends WP_Widget
 {
 	function __construct() {
 
+		// Add widget functionality
 		parent::__construct(
-            'todo_list_widget',  // Base ID
-			'ToDo List',  // Name
+            'todo_list_widget',      // Base ID
+			'ToDo List',             // Name
 			array( 'description' => 'ToDo list widget created for MPC.' )
 		);
 		
@@ -44,10 +45,10 @@ class ToDoListPlugin extends WP_Widget
 
 
 	/**
-	 * Load scripts and stuff.
+	 * Load scripts and admin panel.
 	 */
 	function register() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'frontend_scripts' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'backend_scripts' ) );
 
 		add_action( 'admin_menu', array( $this, 'add_admin_pages' ) );
@@ -55,6 +56,9 @@ class ToDoListPlugin extends WP_Widget
 
 
 
+	/**
+	 * Widget output.
+	 */
 	public function widget( $args, $instance ) {
 
 		echo $args['before_widget'];
@@ -63,14 +67,16 @@ class ToDoListPlugin extends WP_Widget
 			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
 		}
 
-		// Widget output.
-		echo 'HELLO, WORLD!';
+		echo 'hello world';
 
 		echo $args['after_widget'];
     }
  
 
 	
+	/**
+	 * Panel options.
+	 */
     public function form( $instance ) {
  
         $title = ! empty( $instance['title'] ) ? $instance['title'] : esc_html__( '', 'text_domain' );
@@ -124,27 +130,64 @@ class ToDoListPlugin extends WP_Widget
         $instance['text'] = ( !empty( $new_instance['text'] ) ) ? $new_instance['text'] : '';
  
         return $instance;
-    }
+	}
+	
 
 
 	
-	// Add panel in wp navigation
+
+	
+	/**
+	 * Add "ToDo List" admin panel in wp navigation
+	 */
 	public function add_admin_pages() {
-		add_menu_page( 'ToDo List', 'ToDo List', 'manage_options', 'todo_list_plugin', array( $this, 'admin_index' ), 'dashicons-format-aside', null );
+		add_menu_page(
+			'ToDo List',                   // Page title
+			'ToDo List',                   // Menu title
+			'manage_options',              // Capability
+			'todo_list_plugin',            // Menu slug
+			array( $this, 'admin_panel' ), // Function
+			'dashicons-format-aside',      // Icon url
+			null                           // Position
+		);
 	}
-	public function admin_index() {
-		// Work in progress...
+	public function admin_panel() { // Work in progress...
+		?>
+		
+		<h2>Tasks</h2>
+
+	    <hr>
+
+	    <div class="ataskmanager_add_new">
+	        <form action="#" id="ataskmanager_page_add_new_form" data-page="true">
+	            <input type="text" id="ataskmanager_page_new_task" placeholder="Enter new tak here...">
+				<button id="ataskmanager_page_new_task_button" type="submit">
+					<span class="dashicons icons-plus"></span>
+				</button>
+	        </form>
+	    </div>
+	
+	    <hr>
+		
+	    <script>
+			window.ataskmanager_all_page = true;
+			window.ataskmanager_updated = false;
+			window.ataskmanager_loaded = false;
+		</script>
+
+	    <ul class="ataskmanager_list ataskmanager_list_lg">
+	    </ul>
+	
+	    <?php
 	}
 
-
-
-	// Enqueue frontend (wp).
+	// Enqueue frontend.
 	function frontend_scripts() {
 		wp_register_script( 'frontend-js', plugins_url( 'dist/js/frontend.js', __FILE__ ), [ 'jquery' ], '11272018' );
 		wp_enqueue_script( 'frontend-js' );
 	}
 
-	// Enqueue backend (admin).
+	// Enqueue backend.
 	function backend_scripts() {
 		wp_register_script( 'backend-js', plugins_url( 'dist/js/backend.js', __FILE__ ), [ 'jquery' ], '11272018' );
 		wp_enqueue_script( 'backend-js' );
@@ -164,6 +207,6 @@ if ( class_exists( 'ToDoListPlugin' ) ) {
 require_once plugin_dir_path( __FILE__ ) . 'includes/todo-list-activate.php';
 register_activation_hook( __FILE__, array( 'ToDoListActivate', 'activate' ) );
 
-// Deactivation.
+// Deactivation (IMPORTANT: deleting table only by uninstalling).
 require_once plugin_dir_path( __FILE__ ) . 'includes/todo-list-deactivate.php';
 register_deactivation_hook( __FILE__, array( 'ToDoListDeactivate', 'deactivate' ) );

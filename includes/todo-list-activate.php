@@ -12,13 +12,12 @@
 
         // Create database table.
         global $table_prefix, $wpdb;
-    
         $tablename = 'todo_list';
         $todo_list_table = $table_prefix . $tablename;
     
-        $version = get_option('todolist_plugin_version', '1.0.0');
+        $version = get_option( 'todolist_plugin_version', '1.0.0' );
     
-        if ($version < TODOLIST_VERSION || $wpdb->get_var("SHOW TABLES LIKE '{$todo_list_table}'") != $todo_list_table) {
+        if ( $version < TODOLIST_VERSION || $wpdb->get_var( "SHOW TABLES LIKE '{$todo_list_table}'" ) != $todo_list_table ) {
     
             $sql = "CREATE TABLE IF NOT EXISTS `" . $todo_list_table . "`  ( ";
             $sql .= "  `id`  int(11)   NOT NULL auto_increment, ";
@@ -33,9 +32,9 @@
             $sql .= "  PRIMARY KEY `id` (`id`) ";
             $sql .= ") ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ; ";
             require_once( ABSPATH . '/wp-admin/includes/upgrade.php' );
-            dbDelta($sql);
+            dbDelta( $sql );
         }
     
-        update_option('todolist_plugin_version', TODOLIST_VERSION, false);
+        update_option( 'todolist_plugin_version', TODOLIST_VERSION, false );
     }
 }
