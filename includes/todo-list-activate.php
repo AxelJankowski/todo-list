@@ -15,9 +15,7 @@
         $tablename = 'todo_list';
         $todo_list_table = $table_prefix . $tablename;
     
-        $version = get_option( 'todolist_plugin_version', '1.0.0' );
-    
-        if ( $version < TODOLIST_VERSION || $wpdb->get_var( "SHOW TABLES LIKE '{$todo_list_table}'" ) != $todo_list_table ) {
+        if ( $wpdb->get_var( "SHOW TABLES LIKE '{$todo_list_table}'" ) != $todo_list_table ) {
     
             $sql = "CREATE TABLE IF NOT EXISTS `" . $todo_list_table . "`  ( ";
             $sql .= "  `id`  int(11)   NOT NULL auto_increment, ";
@@ -30,7 +28,5 @@
             require_once( ABSPATH . '/wp-admin/includes/upgrade.php' );
             dbDelta( $sql );
         }
-    
-        update_option( 'todolist_plugin_version', TODOLIST_VERSION, false );
     }
 }

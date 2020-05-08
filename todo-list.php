@@ -45,7 +45,7 @@ class ToDoListPlugin
 	/**
 	 * Add task.
 	 */
-	function add_task() {
+	function add_task() { // Work in progress...
 
 		if( isset($_POST['#todo_list_new_task_input'] ) ) {
 
@@ -57,8 +57,6 @@ class ToDoListPlugin
 			$table_name = 'wp_todo_list';
 		
 			$rowResult = $wpdb->insert( $table_name, $data_array, $format=NULL );
-		
-			// $rowResult returns 1
 		
 			if( $rowResult == 1 ) {
 				echo '<h1>Task added successfully!</h1>';
@@ -86,7 +84,7 @@ class ToDoListPlugin
 			null                           // Position
 		);
 	}
-	public function admin_panel() { // Work in progress...
+	public function admin_panel() {
 		?>
 		
 		<div class="container-out">
