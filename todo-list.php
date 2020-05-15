@@ -38,7 +38,46 @@ class ToDoListPlugin
 		add_action( 'admin_menu',            array( $this, 'add_admin_pages' ) );
 
 		add_action( 'wp_ajax_add_task',      array( $this, 'add_task' ) );
+
+		add_action( 'wp_ajax_my_action',     array( $this, 'my_action' ) );
 	}
+
+
+
+
+
+
+
+
+					
+
+					// Same handler function...
+					
+					function my_action() {
+
+						global $wpdb; // this is how you get access to the database
+
+						$wpdb->insert('wp_todo_list', array(
+							'created_user_id' => '',
+							'task' => 'lalal', // ... and so on
+							'status' => '',
+							'priority' => ''
+						));
+					
+						$whatever = intval( $_POST['whatever'] );
+					
+						$whatever += 10;
+					
+							echo $whatever;
+					
+						wp_die(); // this is required to terminate immediately and return a proper response
+					}
+
+
+
+
+
+
 
 
 
@@ -47,16 +86,19 @@ class ToDoListPlugin
 	 */
 	function add_task() { // Work in progress...
 
-		if( isset($_POST['#todo_list_new_task_input'] ) ) {
+		if( isset($_POST['#new_task_form'] ) ) {
 
 			global $wpdb; // Get access to database.
+
+			global $table_prefix, $wpdb;
+			$tablename = 'todo_list';
+			$todo_list_table = $table_prefix . $tablename;
 		
 			$data_array = array(
 				'task' => $_POST['task']
 			);
-			$table_name = 'wp_todo_list';
 		
-			$rowResult = $wpdb->insert( $table_name, $data_array, $format=NULL );
+			$rowResult = $wpdb->insert( $todo_list_table, $data_array, $format=NULL );
 		
 			if( $rowResult == 1 ) {
 				echo '<h1>Task added successfully!</h1>';
@@ -97,7 +139,7 @@ class ToDoListPlugin
 							<span class="checkmark"></span>
 						</label>
 						<label class="input-out">
-							<input class="input-in list-hover" type="item-text" id="task" placeholder="Enter new task here...">
+							<input class="input-in list-hover" type="item-text" id="new_task" placeholder="Enter new task here...">
 						</label>
 					</form>
 
