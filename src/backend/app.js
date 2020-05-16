@@ -1,19 +1,42 @@
 jQuery(document).ready(function($) {
 
-    // Count tasks.
-    function count_tasks() {
-        $.ajax({
+    // Get list element.
+    const todoList = document.querySelector("#todo_list");
+
+    // Get tasks.
+    function get_tasks() {
+        jQuery.ajax({
             url: ajaxurl,
             type: 'POST',
             data: ({
-                action: 'count_tasks'
+                action: 'get_tasks'
             }),
-            success: function (response){
-                console.log('The number of rows in table: ' + response);
+            success: function(response) {
+
+                var tasks = JSON.parse(response);
+                tasks.forEach(function(task) {
+
+                    var listItem = '<li class="item list-hover">' +
+                                        '<label class="item-checkbox" style="padding-right: 4px;">' + // These 4 pixels literally vanished, I don't have the slightest clue what happened.
+                                            '<input type="checkbox" checked="checked">' +
+                                            '<span class="checkmark"></span>' +
+                                        '</label>' +
+                                        '<label class="item-text list-hover">' + task['task'] + '</label>' +
+                                    '</li>';
+
+                    todoList.innerHTML += listItem;
+
+                });
+
+            },
+            error: function() {
+
+                console.log('AJAX error getting tasks.');
+
             }
         });
     }
-    count_tasks();
+    get_tasks();
 
 
 
@@ -31,3 +54,6 @@ jQuery(document).ready(function($) {
         });
     });
 });
+
+
+// "Add" does not work, when "Get" does. WHY?
