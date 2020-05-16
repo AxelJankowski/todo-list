@@ -11,7 +11,7 @@
  * 
  * @wordpress-plugin
  * Plugin Name: ToDo List
- * Description: Simple ToDo list plugin created as a recruitment task for MPC.
+ * Description: Simple ToDo list plugin using AJAX. You may add tasks, delete them or mark as done.
  * Version:     1.0.0
  * Author:      Axel Jankowski
  * Author URI:  https://axeljankowski.github.io
@@ -52,9 +52,11 @@ class ToDoListPlugin
 		$tablename = 'todo_list';
 		$todo_list_table = $table_prefix . $tablename;
 
-		$rowcount = $wpdb->get_var( "SELECT COUNT(*) FROM `$todo_list_table`" );
+		$user_id = get_current_user_id();
 
-		echo $rowcount;
+		$rowcount = $wpdb->get_var( "SELECT COUNT(*) FROM {$todo_list_table} WHERE created_user_id = '{$user_id}'" );
+
+		echo $rowcount; // Should pass ajax result to list in admin panel, work in progress...
 
 		wp_die();
 	}
@@ -70,8 +72,10 @@ class ToDoListPlugin
 		$tablename = 'todo_list';
 		$todo_list_table = $table_prefix . $tablename;
 
+		$user_id = get_current_user_id();
+
 		$data_array = array(
-			'created_user_id' => '',
+			'created_user_id' => $user_id,
 			'task'            => $_POST['task'],
 			'status'          => '',
 			'priority'        => ''
