@@ -37,77 +37,58 @@ class ToDoListPlugin
 
 		add_action( 'admin_menu',            array( $this, 'add_admin_pages' ) );
 
+		add_action( 'wp_ajax_count_tasks',   array( $this, 'count_tasks' ) );
 		add_action( 'wp_ajax_add_task',      array( $this, 'add_task' ) );
-
-		add_action( 'wp_ajax_my_action',     array( $this, 'my_action' ) );
 	}
 
 
 
+	/**
+	 * Count tasks.
+	 */
+	function count_tasks() {
 
+		global $table_prefix, $wpdb;
+		$tablename = 'todo_list';
+		$todo_list_table = $table_prefix . $tablename;
 
+		$rowcount = $wpdb->get_var( "SELECT COUNT(*) FROM `$todo_list_table`" );
 
+		echo $rowcount;
 
-
-					
-
-					// Same handler function...
-					
-					function my_action() {
-
-						global $wpdb; // this is how you get access to the database
-
-						$wpdb->insert('wp_todo_list', array(
-							'created_user_id' => '',
-							'task' => 'lalal', // ... and so on
-							'status' => '',
-							'priority' => ''
-						));
-					
-						$whatever = intval( $_POST['whatever'] );
-					
-						$whatever += 10;
-					
-							echo $whatever;
-					
-						wp_die(); // this is required to terminate immediately and return a proper response
-					}
-
-
-
-
-
-
+		wp_die();
+	}
 
 
 
 	/**
-	 * Add task.
+	 * Add new task.
 	 */
-	function add_task() { // Work in progress...
+	function add_task() {
 
-		if( isset($_POST['#new_task_form'] ) ) {
+		global $table_prefix, $wpdb;
+		$tablename = 'todo_list';
+		$todo_list_table = $table_prefix . $tablename;
 
-			global $wpdb; // Get access to database.
+		$data_array = array(
+			'created_user_id' => '',
+			'task'            => $_POST['task'],
+			'status'          => '',
+			'priority'        => ''
+		);
 
-			global $table_prefix, $wpdb;
-			$tablename = 'todo_list';
-			$todo_list_table = $table_prefix . $tablename;
-		
-			$data_array = array(
-				'task' => $_POST['task']
-			);
-		
-			$rowResult = $wpdb->insert( $todo_list_table, $data_array, $format=NULL );
-		
-			if( $rowResult == 1 ) {
-				echo '<h1>Task added successfully!</h1>';
-			} else {
-				echo 'Error adding task.';
-			}
-		
-			wp_die();
+		if( $wpdb->insert( $todo_list_table, $data_array ) ) {
+
+			echo 'New task added!';
+
+		} else {
+
+			echo 'Error adding task.';
+
 		}
+	
+		wp_die();
+
 	}
 
 
@@ -133,7 +114,9 @@ class ToDoListPlugin
 			<div class="container-in">
 
 				<ul class="list">
-					<form method="POST" action="#" class="item list-hover item-input" id="new_task_form" data-page="true">
+
+					<form method="POST" class="item list-hover item-input" id="new_task_form" data-page="true">
+
 						<label class="item-checkbox">
 							<input type="checkbox">
 							<span class="checkmark"></span>
@@ -141,6 +124,7 @@ class ToDoListPlugin
 						<label class="input-out">
 							<input class="input-in list-hover" type="item-text" id="new_task" placeholder="Enter new task here...">
 						</label>
+
 					</form>
 
 					<li class="item list-hover">
