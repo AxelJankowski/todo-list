@@ -4,7 +4,7 @@ jQuery(document).ready(function($) {
 
 
 
-    var tasks_container = document.querySelector("#tasks-container"); // Get tasks container element.
+    var tasks_container = $('#tasks-container')[0]; // Get tasks container element.
 
 
 
@@ -19,25 +19,31 @@ jQuery(document).ready(function($) {
             }),
             success: function(response) {
 
-                var tasks = JSON.parse(response);
-                tasks.forEach(function(task) {
+                    var tasks = JSON.parse(response);
+                    tasks.forEach(function(task) {
 
-                    var listItem = '<li class="item list-hover">' +
-                                        '<label class="item-checkbox" style="padding-right: 4px;">' + // These 4 pixels literally vanished, I don't have the slightest clue what happened.
-                                            '<input type="checkbox" checked="checked">' +
-                                            '<span class="checkmark"></span>' +
-                                        '</label>' +
-                                        '<label class="item-text list-hover">' + task['task'] + '</label>' +
-                                    '</li>';
+                        if(task['status'] == 1) { // Check if task is done.
+                            var status = 'checked';
+                        } else {
+                            var status = '';
+                        }
 
-                    tasks_container.innerHTML += listItem; // Display tasks.
+                        var listItem = '<li class="item list-hover">' +
+                                            '<label class="item-checkbox" style="padding-right: 4px;">' + // These 4 pixels literally vanished, I don't have the slightest clue what happened.
+                                                '<input type="checkbox" ' + status + '>' +
+                                                '<span class="checkmark"></span>' +
+                                            '</label>' +
+                                            '<label class="item-text list-hover">' + task['task'] + '</label>' +
+                                        '</li>';
 
-                });
+                        tasks_container.innerHTML += listItem; // Display tasks.
+
+                    });
 
             },
             error: function() {
 
-                console.log('AJAX error getting tasks.');
+                    console.log('AJAX error getting tasks.');
 
             }
         });
@@ -65,21 +71,24 @@ jQuery(document).ready(function($) {
             type: 'POST',
             data: {
                 action: 'add_task',
-                task: $('form#new_task_form #new_task').val()
+                task: $('#new_task').val()
             },
             success: function(response) {
 
-                console.log('New task added: ' + response);
+                    console.log('New task added: ' + response);
 
-                refresh();
+                    refresh();
             
             },
             error: function() {
 
-                console.log('Error addding task.');
+                    console.log('Error addding task.');
 
             }
         });
+
+        $('#new_task_form')[0].reset(); // Clear input in form.
+
     });
 
 });

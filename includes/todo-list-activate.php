@@ -21,7 +21,7 @@
             $sql .= "  `id`  int(11)   NOT NULL auto_increment, ";
             $sql .= "  `created_user_id` int(11) NOT NULL, ";
             $sql .= "  `task` text NOT NULL, ";
-            $sql .= "  `status` varchar(255) NOT NULL, ";
+            $sql .= "  `status` tinyint(1) NOT NULL DEFAULT '0', ";
             $sql .= "  `priority` int(11) NOT NULL DEFAULT '0', ";
             $sql .= "  PRIMARY KEY `id` (`id`) ";
             $sql .= ") ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ; ";
