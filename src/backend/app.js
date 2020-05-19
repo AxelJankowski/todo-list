@@ -4,12 +4,13 @@ jQuery(document).ready(function($) {
 
 
 
+    var tasks_container = document.querySelector("#tasks-container"); // Get tasks container element.
+
+
+
     // Get tasks.
     function get_tasks() {
-        var tasks_container = document.querySelector("#tasks-container"); // Get tasks container element.
-
-        tasks_container.innerHTML = ""; // Make sure the container is empty before displaying tasks.
-
+        
         jQuery.ajax({
             url: ajaxurl,
             type: 'POST',
@@ -47,6 +48,8 @@ jQuery(document).ready(function($) {
     // Refresh list.
     function refresh() {
 
+        tasks_container.innerHTML = ""; // Empty the container before displaying tasks.
+
         get_tasks();
 
     }
@@ -80,6 +83,3 @@ jQuery(document).ready(function($) {
     });
 
 });
-
-
-// "Add" does not work, when "Get" does. WHY?

@@ -128,29 +128,8 @@ class ToDoListPlugin
 					
 					<div id="tasks-container">
 
-						<!-- Below should be cleared. -->
-						<li class="item list-hover">
-							<label class="item-checkbox">
-								<input type="checkbox" checked="checked">
-								<span class="checkmark"></span>
-							</label>
-							<label class="item-text list-hover">Ale bardzo się staram serio.</label>
-						</li>
-						<li class="item list-hover">
-							<label class="item-checkbox">
-								<input type="checkbox" checked="checked">
-								<span class="checkmark"></span>
-							</label>
-							<label class="item-text list-hover">Niech mnie wezmą chociaż na staż.</label>
-						</li>
-						<li class="item list-hover">
-							<label class="item-checkbox">
-								<input type="checkbox">
-								<span class="checkmark"></span>
-							</label>
-							<label class="item-text list-hover">Pan da 3.</label>
-						</li>
-
+						<!-- New tasks will display here. -->
+						
 					</div>
 
 				</ul>
