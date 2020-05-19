@@ -30,10 +30,9 @@ jQuery(document).ready(function($) {
 
                         var listItem = '<li class="item list-hover">' +
                                             '<label class="item-checkbox" style="padding-right: 4px;">' + // These 4 pixels literally vanished, I don't have the slightest clue what happened.
-                                                '<input type="checkbox" ' + status + '>' +
-                                                '<span class="checkmark"></span>' +
+                                                '<input class="checkbox" id="' + task['id'] + '" type="checkbox" ' + status + '>' +
                                             '</label>' +
-                                            '<label class="item-text list-hover">' + task['task'] + '</label>' +
+                                            '<label class="item-text list-hover" id="task-' + task['id'] + '">' + task['task'] + '</label>' +
                                         '</li>';
 
                         tasks_container.innerHTML += listItem; // Display tasks.
@@ -88,6 +87,33 @@ jQuery(document).ready(function($) {
         });
 
         $('#new_task_form')[0].reset(); // Clear input in form.
+
+    });
+
+
+
+    // Change task status (mark as done or not).
+    jQuery(document).on('click', '.checkbox', function() { // Trigger on click.
+
+        jQuery.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'mark_task',
+                task_id: $(this).attr('id'),
+                checked: $(this).attr('checked')
+            },
+            success: function(response) {
+
+                    console.log('Task ' + response + '.');
+
+            },
+            error: function() {
+
+                    console.log('Error updating task status.');
+
+            }
+        });
 
     });
 

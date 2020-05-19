@@ -39,6 +39,7 @@ class ToDoListPlugin
 
 		add_action( 'wp_ajax_get_tasks',     array( $this, 'get_tasks' ) );
 		add_action( 'wp_ajax_add_task',      array( $this, 'add_task' ) );
+		add_action( 'wp_ajax_mark_task',     array( $this, 'mark_task' ) );
 	}
 
 
@@ -57,7 +58,7 @@ class ToDoListPlugin
 		$tasks = $wpdb->get_results( "SELECT * FROM {$todo_list_table} WHERE created_user_id = '{$user_id}'" );
 		$tasks = json_encode($tasks);
 
-		echo $tasks; // Should pass ajax result to list in admin panel, work in progress...
+		echo $tasks;
 
 		wp_die();
 	}
@@ -78,14 +79,59 @@ class ToDoListPlugin
 		$data_array = array(
 			'created_user_id' => $user_id,
 			'task'            => $_POST['task'],
-			'status'          => '',
-			'priority'        => ''
+			'status'          => '0',
+			'priority'        => '0'
 		);
 
 		$wpdb->insert( $todo_list_table, $data_array );
 
 		echo $data_array['task'];
 	
+		wp_die();
+
+	}
+
+
+
+	/**
+	 * Change task status (mark as done or not).
+	 */
+	function mark_task() {
+
+		global $table_prefix, $wpdb;
+		$tablename = 'todo_list';
+		$todo_list_table = $table_prefix . $tablename;
+
+		$checked = $_POST['checked'];
+		$task_id = $_POST['task_id'];
+
+		$where = array(
+			'id' => $_POST['task_id']
+		);
+
+		$wpdb->update( $todo_list_table, $data_array, $where );
+
+		
+		if ( $checked == 'checked' ) { // Checked.
+
+			$data_array = array(
+				'status' => '1'
+			);
+
+			$wpdb->update( $todo_list_table, $data_array, $where );
+			echo $task_id . ' ' . $checked;
+
+		} elseif ( $checked != 'checked' ) { // Unchecked.
+
+			$data_array = array(
+				'status' => '0'
+			);
+
+			$wpdb->update( $todo_list_table, $data_array, $where );
+			echo $task_id . ' unchecked';
+
+		}
+		
 		wp_die();
 
 	}
@@ -118,7 +164,6 @@ class ToDoListPlugin
 
 						<label class="item-checkbox">
 							<input type="checkbox">
-							<span class="checkmark"></span>
 						</label>
 						<label class="input-out">
 							<input class="input-in list-hover" type="item-text" name="new_task" id="new_task" placeholder="Enter new task here...">
