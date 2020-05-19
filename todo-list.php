@@ -82,15 +82,9 @@ class ToDoListPlugin
 			'priority'        => ''
 		);
 
-		if( $wpdb->insert( $todo_list_table, $data_array ) ) {
+		$wpdb->insert( $todo_list_table, $data_array );
 
-			echo 'New task added!';
-
-		} else {
-
-			echo 'Error adding task.';
-
-		}
+		echo $data_array['task'];
 	
 		wp_die();
 
@@ -118,7 +112,7 @@ class ToDoListPlugin
 		<div class="container-out">
 			<div class="container-in">
 
-				<ul class="list" id="todo_list">
+				<ul class="list">
 
 					<form method="POST" class="item list-hover item-input" name="new_task_form" id="new_task_form" data-page="true">
 
@@ -131,28 +125,34 @@ class ToDoListPlugin
 						</label>
 
 					</form>
+					
+					<div id="tasks-container">
 
-					<li class="item list-hover">
-						<label class="item-checkbox">
-							<input type="checkbox" checked="checked">
-							<span class="checkmark"></span>
-						</label>
-						<label class="item-text list-hover">Ale bardzo się staram serio.</label>
-					</li>
-					<li class="item list-hover">
-						<label class="item-checkbox">
-							<input type="checkbox" checked="checked">
-							<span class="checkmark"></span>
-						</label>
-						<label class="item-text list-hover">Niech mnie wezmą chociaż na staż.</label>
-					</li>
-					<li class="item list-hover">
-						<label class="item-checkbox">
-							<input type="checkbox">
-							<span class="checkmark"></span>
-						</label>
-						<label class="item-text list-hover">Pan da 3.</label>
-					</li>
+						<!-- Below should be cleared. -->
+						<li class="item list-hover">
+							<label class="item-checkbox">
+								<input type="checkbox" checked="checked">
+								<span class="checkmark"></span>
+							</label>
+							<label class="item-text list-hover">Ale bardzo się staram serio.</label>
+						</li>
+						<li class="item list-hover">
+							<label class="item-checkbox">
+								<input type="checkbox" checked="checked">
+								<span class="checkmark"></span>
+							</label>
+							<label class="item-text list-hover">Niech mnie wezmą chociaż na staż.</label>
+						</li>
+						<li class="item list-hover">
+							<label class="item-checkbox">
+								<input type="checkbox">
+								<span class="checkmark"></span>
+							</label>
+							<label class="item-text list-hover">Pan da 3.</label>
+						</li>
+
+					</div>
+
 				</ul>
 
 			</div>

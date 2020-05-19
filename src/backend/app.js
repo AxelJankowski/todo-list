@@ -1,10 +1,15 @@
 jQuery(document).ready(function($) {
 
-    // Get list element.
-    const todoList = document.querySelector("#todo_list");
+    get_tasks();
+
+
 
     // Get tasks.
     function get_tasks() {
+        var tasks_container = document.querySelector("#tasks-container"); // Get tasks container element.
+
+        tasks_container.innerHTML = ""; // Make sure the container is empty before displaying tasks.
+
         jQuery.ajax({
             url: ajaxurl,
             type: 'POST',
@@ -24,7 +29,7 @@ jQuery(document).ready(function($) {
                                         '<label class="item-text list-hover">' + task['task'] + '</label>' +
                                     '</li>';
 
-                    todoList.innerHTML += listItem;
+                    tasks_container.innerHTML += listItem; // Display tasks.
 
                 });
 
@@ -36,7 +41,15 @@ jQuery(document).ready(function($) {
             }
         });
     }
-    get_tasks();
+
+
+
+    // Refresh list.
+    function refresh() {
+
+        get_tasks();
+
+    }
 
 
 
@@ -44,15 +57,28 @@ jQuery(document).ready(function($) {
     jQuery('#new_task_form').submit(function(event) { // Trigger on submit.
         event.preventDefault();
 
-        var data = {
-            'action': 'add_task',
-            'task':   $('form#new_task_form #new_task').val()
-        };
+        jQuery.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'add_task',
+                task: $('form#new_task_form #new_task').val()
+            },
+            success: function(response) {
 
-        jQuery.post(ajaxurl, data, function(response) {
-            console.log('Got this from the server: ' + response);
+                console.log('New task added: ' + response);
+
+                refresh();
+            
+            },
+            error: function() {
+
+                console.log('Error addding task.');
+
+            }
         });
     });
+
 });
 
 
