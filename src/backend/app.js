@@ -32,7 +32,7 @@ jQuery(document).ready(function($) {
                                             '<label class="item-checkbox" style="padding-right: 4px;">' + // These 4 pixels literally vanished, I don't have the slightest clue what happened.
                                                 '<input class="checkbox" id="' + task['id'] + '" type="checkbox" ' + status + '>' +
                                             '</label>' +
-                                            '<label class="item-text list-hover" id="task-' + task['id'] + '">' + task['task'] + '</label>' +
+                                            '<label class="item-text list-hover" id="task-' + task['id'] + '" contenteditable="true">' + task['task'] + '</label>' +
                                         '</li>';
 
                         tasks_container.innerHTML += listItem; // Display tasks.
@@ -120,40 +120,35 @@ jQuery(document).ready(function($) {
 
 
     // Edit task.
-    jQuery(document).on('click', '.item-text', function() { // Trigger on click.
-        $(this).attr('contenteditable', 'true'); // Allow task edit.
+    jQuery(document).on('keypress', '.item-text', function(event) { // Trigger on pressing the key.
+        
+        var task_id = $(this).attr('id');
+        var text = $('#' + task_id)[0].textContent; // Get text.
 
-        jQuery(document).on('keyup', '.item-text', function(event) { // Trigger on key.
+        if (event.keyCode == 13) { // Key 13 is Enter.
+            event.preventDefault(); // Prevent new line.
 
-            var task_id = $(this).attr('id');
-            var text = $('#' + task_id)[0].textContent; // Get text.
+            jQuery.ajax({
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'edit_task',
+                    task_id: task_id,
+                    text: text,
+                },
+                success: function(response) {
 
-            if (event.keyCode === 13) { // Key 13 is Enter.
-                event.preventDefault();
+                        console.log('Task ' + response);
 
-                jQuery.ajax({
-                    url: ajaxurl,
-                    type: 'POST',
-                    data: {
-                        action: 'edit_task',
-                        task_id: task_id,
-                        text: text,
-                    },
-                    success: function(response) {
-    
-                            console.log('Task ' + response + ' edited.');
-    
-                    },
-                    error: function() {
-    
-                            console.log('Error editing task.');
-    
-                    }
-                })
+                },
+                error: function() {
 
-            }
+                        console.log('Error editing task.');
 
-        });
+                }
+            })
+
+        }
 
     });
 

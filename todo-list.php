@@ -103,15 +103,12 @@ class ToDoListPlugin
 		$tablename = 'todo_list';
 		$todo_list_table = $table_prefix . $tablename;
 
-		$checked = $_POST['checked'];
 		$task_id = $_POST['task_id'];
+		$checked = $_POST['checked'];
 
 		$where = array(
-			'id' => $_POST['task_id']
+			'id' => $task_id
 		);
-
-		$wpdb->update( $todo_list_table, $data_array, $where );
-
 		
 		if ( $checked == 'checked' ) { // Checked.
 
@@ -148,10 +145,20 @@ class ToDoListPlugin
 		$tablename = 'todo_list';
 		$todo_list_table = $table_prefix . $tablename;
 
-		$task_id = $_POST['task_id'];
+		$task_id = substr( $_POST['task_id'], 5 ); // Select only ID number.
 		$text = $_POST['text'];
 
-		echo $text;
+		$where = array(
+			'id' => $task_id
+		);
+
+		$data_array = array(
+			'task' => $text
+		);
+
+		$wpdb->update( $todo_list_table, $data_array, $where );
+
+		echo $task_id . ' edited to: ' . $text;
 
 		wp_die();
 
