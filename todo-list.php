@@ -206,7 +206,7 @@ class ToDoListPlugin
 							<input type="checkbox">
 						</label>
 						<label class="input-out">
-							<input class="input-in list-hover" type="item-text" name="new_task" id="new_task" placeholder="Enter new task here...">
+							<input class="input-in list-hover" type="item-text" name="new_task" id="new_task" placeholder="Enter new task here..." required>
 						</label>
 
 					</form>
