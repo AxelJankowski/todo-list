@@ -74,7 +74,7 @@
   }
 }
 
-.list-hover:hover {
+.list-hover:hover { // Color on hover.
   background-color: $hover-color;
   -webkit-transition: all 0.2s;
   -moz-transition:    all 0.2s;
@@ -96,4 +96,13 @@
     font-size:  1em;
     width:     18em;
   }
+}
+
+.trash { // Trash icon.
+  display:       none;
+  float:        right;
+  margin-right: 0.6em;
+}
+.list-hover:hover .trash {
+  display:      block;
 }

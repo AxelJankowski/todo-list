@@ -33,6 +33,7 @@ jQuery(document).ready(function($) {
                                                 '<input class="checkbox" id="' + task['id'] + '" type="checkbox" ' + status + '>' +
                                             '</label>' +
                                             '<label class="item-text list-hover" id="task-' + task['id'] + '" contenteditable="true">' + task['task'] + '</label>' +
+                                            '<span class="dashicons dashicons-trash trash" id="trash-' + task['id'] + '"></span>' +
                                         '</li>';
 
                         tasks_container.innerHTML += listItem; // Display tasks.
@@ -72,9 +73,7 @@ jQuery(document).ready(function($) {
                 action: 'add_task',
                 task: $('#new_task').val()
             },
-            success: function(response) {
-
-                    console.log('New task added: ' + response);
+            success: function() {
 
                     refresh();
             
@@ -102,11 +101,6 @@ jQuery(document).ready(function($) {
                 action: 'mark_task',
                 task_id: $(this).attr('id'),
                 checked: $(this).attr('checked')
-            },
-            success: function(response) {
-
-                    console.log('Task ' + response + '.');
-
             },
             error: function() {
 
@@ -136,11 +130,6 @@ jQuery(document).ready(function($) {
                     task_id: task_id,
                     text: text,
                 },
-                success: function(response) {
-
-                        console.log('Task ' + response);
-
-                },
                 error: function() {
 
                         console.log('Error editing task.');
@@ -150,6 +139,32 @@ jQuery(document).ready(function($) {
 
         }
 
+    });
+
+
+
+    // Delete task.
+    jQuery(document).on('click', '.trash', function() { // Trigger on click.
+
+        jQuery.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'delete_task',
+                task_id: $(this).attr('id')
+            },
+            success: function() {
+
+                refresh();
+
+            },
+            error: function() {
+
+                    console.log('Error deleting task.');
+
+            }
+        })
+        
     });
 
 });

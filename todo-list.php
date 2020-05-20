@@ -11,7 +11,7 @@
  * 
  * @wordpress-plugin
  * Plugin Name: ToDo List
- * Description: Simple ToDo list plugin using AJAX. You may add tasks, delete them or mark as done.
+ * Description: Simple ToDo list plugin using AJAX. You may add tasks, delete and edit them or mark/unmark as done.
  * Version:     1.0.0
  * Author:      Axel Jankowski
  * Author URI:  https://axeljankowski.github.io
@@ -41,6 +41,7 @@ class ToDoListPlugin
 		add_action( 'wp_ajax_add_task',      array( $this, 'add_task' ) );
 		add_action( 'wp_ajax_mark_task',     array( $this, 'mark_task' ) );
 		add_action( 'wp_ajax_edit_task',     array( $this, 'edit_task' ) );
+		add_action( 'wp_ajax_delete_task',   array( $this, 'delete_task' ) );
 	}
 
 
@@ -85,8 +86,6 @@ class ToDoListPlugin
 		);
 
 		$wpdb->insert( $todo_list_table, $data_array );
-
-		echo $data_array['task'];
 	
 		wp_die();
 
@@ -117,7 +116,6 @@ class ToDoListPlugin
 			);
 
 			$wpdb->update( $todo_list_table, $data_array, $where );
-			echo $task_id . ' ' . $checked;
 
 		} elseif ( $checked != 'checked' ) { // Unchecked.
 
@@ -126,7 +124,6 @@ class ToDoListPlugin
 			);
 
 			$wpdb->update( $todo_list_table, $data_array, $where );
-			echo $task_id . ' unchecked';
 
 		}
 		
@@ -145,7 +142,7 @@ class ToDoListPlugin
 		$tablename = 'todo_list';
 		$todo_list_table = $table_prefix . $tablename;
 
-		$task_id = substr( $_POST['task_id'], 5 ); // Select only ID number.
+		$task_id = substr( $_POST['task_id'], 5 ); // Select only ID of the task in database.
 		$text = $_POST['text'];
 
 		$where = array(
@@ -158,10 +155,25 @@ class ToDoListPlugin
 
 		$wpdb->update( $todo_list_table, $data_array, $where );
 
-		echo $task_id . ' edited to: ' . $text;
-
 		wp_die();
 
+	}
+
+
+
+	/**
+	 * Delete task.
+	 */
+	function delete_task() {
+		global $table_prefix, $wpdb;
+		$tablename = 'todo_list';
+		$todo_list_table = $table_prefix . $tablename;
+
+		$task_id = substr( $_POST['task_id'], 6 ); // Select only ID of the task in database.
+
+		$wpdb->delete( $todo_list_table, array( 'id' => $task_id ) );
+
+		wp_die();
 	}
 
 
