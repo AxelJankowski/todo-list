@@ -40,6 +40,7 @@ class ToDoListPlugin
 		add_action( 'wp_ajax_get_tasks',     array( $this, 'get_tasks' ) );
 		add_action( 'wp_ajax_add_task',      array( $this, 'add_task' ) );
 		add_action( 'wp_ajax_mark_task',     array( $this, 'mark_task' ) );
+		add_action( 'wp_ajax_edit_task',     array( $this, 'edit_task' ) );
 	}
 
 
@@ -132,6 +133,26 @@ class ToDoListPlugin
 
 		}
 		
+		wp_die();
+
+	}
+
+
+
+	/**
+	 * Edit task.
+	 */
+	function edit_task() {
+
+		global $table_prefix, $wpdb;
+		$tablename = 'todo_list';
+		$todo_list_table = $table_prefix . $tablename;
+
+		$task_id = $_POST['task_id'];
+		$text = $_POST['text'];
+
+		echo $text;
+
 		wp_die();
 
 	}

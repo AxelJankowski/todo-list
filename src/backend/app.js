@@ -117,4 +117,44 @@ jQuery(document).ready(function($) {
 
     });
 
+
+
+    // Edit task.
+    jQuery(document).on('click', '.item-text', function() { // Trigger on click.
+        $(this).attr('contenteditable', 'true'); // Allow task edit.
+
+        jQuery(document).on('keyup', '.item-text', function(event) { // Trigger on key.
+
+            var task_id = $(this).attr('id');
+            var text = $('#' + task_id)[0].textContent; // Get text.
+
+            if (event.keyCode === 13) { // Key 13 is Enter.
+                event.preventDefault();
+
+                jQuery.ajax({
+                    url: ajaxurl,
+                    type: 'POST',
+                    data: {
+                        action: 'edit_task',
+                        task_id: task_id,
+                        text: text,
+                    },
+                    success: function(response) {
+    
+                            console.log('Task ' + response + ' edited.');
+    
+                    },
+                    error: function() {
+    
+                            console.log('Error editing task.');
+    
+                    }
+                })
+
+            }
+
+        });
+
+    });
+
 });
